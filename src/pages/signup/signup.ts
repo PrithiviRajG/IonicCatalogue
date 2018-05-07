@@ -4,6 +4,9 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 
 import { User } from '../../providers';
 import { MainPage } from '../';
+import { Firebase } from '@ionic-native/firebase';
+
+import firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -20,17 +23,40 @@ export class SignupPage {
     password: 'test'
   };
 
+  public recaptchaVerifier:firebase.auth.RecaptchaVerifier;
+
   // Our translated text strings
   private signupErrorString: string;
 
   constructor(public navCtrl: NavController,
     public user: User,
     public toastCtrl: ToastController,
-    public translateService: TranslateService) {
+    public translateService: TranslateService,
+    private firebase: Firebase) {
 
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
     })
+  }
+
+  ionViewDidLoad() {
+    this.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+  }
+  
+
+  signIn(phoneNumber: number){
+    const appVerifier = this.recaptchaVerifier;
+    const phoneNumberString = "+" + phoneNumber;
+  
+    firebase.auth().signInWithPhoneNumber(phoneNumberString, appVerifier)
+      .then( confirmationResult => {
+        // SMS sent. Prompt user to type the code from the message, then sign the
+        // user in with confirmationResult.confirm(code).
+    })
+    .catch(function (error) {
+      console.error("SMS not sent", error);
+    });
+  
   }
 
   doSignup() {
