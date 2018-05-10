@@ -8,7 +8,7 @@
 
 
 <ion-content>
-  <form (submit)="doSignup()">
+  <form (submit)="signIn()">
     <ion-list>
 
       <ion-item>
@@ -36,8 +36,8 @@
       </ion-item>
 
       <ion-item>
-        <ion-label stacked>Phone Number</ion-label>
-        <ion-input type="number" [(ngModel)]="phoneNumber"></ion-input>
+        <ion-label fixed>{{'PHONE_NUMBER' | translate}}</ion-label>
+        <ion-input type="number" [(ngModel)]="account.phoneNumber" name="phoneNumber"></ion-input>
       </ion-item>
       
 
@@ -47,4 +47,5 @@
 
     </ion-list>
   </form>
+  <div id="recaptcha-container"></div>
 </ion-content>

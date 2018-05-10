@@ -6,7 +6,8 @@ import { User } from '../../providers';
 import { MainPage } from '../';
 import { Firebase } from '@ionic-native/firebase';
 
-import firebase from 'firebase';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase'
 
 @IonicPage()
 @Component({
@@ -17,10 +18,11 @@ export class SignupPage {
   // The account fields for the login form.
   // If you're using the username field with or without email, make
   // sure to add it to the type
-  account: { name: string, email: string, password: string } = {
+  account: { name: string, email: string, password: string, phoneNumber : string } = {
     name: 'Test Human',
     email: 'test@example.com',
-    password: 'test'
+    password: 'test',
+    phoneNumber: '9842172009'
   };
 
   public recaptchaVerifier:firebase.auth.RecaptchaVerifier;
@@ -32,7 +34,7 @@ export class SignupPage {
     public user: User,
     public toastCtrl: ToastController,
     public translateService: TranslateService,
-    private firebase: Firebase) {
+    private firebase: Firebase, private afAuth: AngularFireAuth) {
 
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
@@ -44,18 +46,28 @@ export class SignupPage {
   }
   
 
-  signIn(phoneNumber: number){
+  signIn(){
     const appVerifier = this.recaptchaVerifier;
-    const phoneNumberString = "+" + phoneNumber;
+    //const phoneNumberString = "+" + phoneNumber;
+
+    this.afAuth.auth.signInWithPhoneNumber("+919842172009", appVerifier)
+    .then( confirmationResult => {
+      // SMS sent. Prompt user to type the code from the message, then sign the
+      // user in with confirmationResult.confirm(code).
+      console.log(confirmationResult);
+  })
+  .catch(function (error) {
+    console.error("SMS not sent", error);
+  });
   
-    firebase.auth().signInWithPhoneNumber(phoneNumberString, appVerifier)
+    /*firebase.auth().signInWithPhoneNumber(phoneNumberString, appVerifier)
       .then( confirmationResult => {
         // SMS sent. Prompt user to type the code from the message, then sign the
         // user in with confirmationResult.confirm(code).
     })
     .catch(function (error) {
       console.error("SMS not sent", error);
-    });
+    });*/
   
   }
 
