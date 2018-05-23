@@ -11,9 +11,16 @@ import { Items } from '../../providers';
 })
 export class ListMasterPage {
   currentItems: Item[];
+  items = [
+    "Two Wheeler", "Three Wheeler", "Four Wheeler", "Commercial vehicle"
+  ];
 
-  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController) {
-    this.currentItems = this.items.query();
+  itemSelected(item: string) {
+    console.log("Selected Item", item);
+  }
+
+  constructor(public navCtrl: NavController, public itemsProvider: Items, public modalCtrl: ModalController) {
+    this.currentItems = this.itemsProvider.query();
   }
 
   /**
@@ -30,7 +37,7 @@ export class ListMasterPage {
     let addModal = this.modalCtrl.create('ItemCreatePage');
     addModal.onDidDismiss(item => {
       if (item) {
-        this.items.add(item);
+        this.itemsProvider.add(item);
       }
     })
     addModal.present();
@@ -40,14 +47,14 @@ export class ListMasterPage {
    * Delete an item from the list of items.
    */
   deleteItem(item) {
-    this.items.delete(item);
+    this.itemsProvider.delete(item);
   }
 
   /**
    * Navigate to the detail page for this item.
    */
-  openItem(item: Item) {
-    this.navCtrl.push('ItemDetailPage', {
+  openItem(item: any) {
+    this.navCtrl.push('VehicleModelPage', {
       item: item
     });
   }

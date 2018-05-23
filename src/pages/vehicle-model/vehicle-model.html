@@ -1,0 +1,16 @@
+<ion-header>
+    <ion-navbar>
+      <ion-title>{{item}}</ion-title>
+    </ion-navbar>
+  </ion-header>
+
+<ion-content>
+    <ion-list>
+        <button ion-item *ngFor="let item of vehicles" (click)="openItem(item)">
+            <ion-icon name="arrow-dropright-circle" item-end></ion-icon>
+          {{ item }}
+        </button>
+        
+      </ion-list>
+
+</ion-content>
